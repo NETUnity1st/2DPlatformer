@@ -15,6 +15,7 @@ public class GameManager : MonoBehaviour
     public Image[] UIhealth;
     public Text UIPoint;
     public Text UIStage;
+    public Text UIBullet;
     public GameObject RestartBtn;
     public void NextStage()
     {
@@ -47,10 +48,16 @@ public class GameManager : MonoBehaviour
             player.OnDie();
             Debug.Log("Died");
 
+            Text btnText = RestartBtn.GetComponentInChildren<Text>();
+            btnText.text = "Retry?";
             RestartBtn.SetActive(true);
         }
     }
 
+    public void GETBullet(int N){
+        Bullet+=N;
+        UIBullet.text = "Bullet : " + (Bullet);
+    }
     void PlayerReposition()
     {
         player.VelocityZero();
@@ -63,6 +70,7 @@ public class GameManager : MonoBehaviour
             healthDown();
             if (health > 1)
                 PlayerReposition();
+            player.PlaySound("DAMAGED");
         }
     }
     
@@ -72,6 +80,7 @@ public class GameManager : MonoBehaviour
     {
         RestartBtn.SetActive(false);
         health = 3;
+        Bullet = 0;
     }
 
     // Update is called once per frame
@@ -82,6 +91,7 @@ public class GameManager : MonoBehaviour
     }
     public void Restart()
     {
+        Time.timeScale = 1;
         SceneManager.LoadScene(0);
     }
 }
