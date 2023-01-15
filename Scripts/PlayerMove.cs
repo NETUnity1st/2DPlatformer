@@ -65,22 +65,25 @@ public class PlayerMove : MonoBehaviour
         //공격(총알)에 관한 코드
         if (Input.GetKeyDown(KeyCode.LeftControl))
         {
-            if(gameManager.Bullet > -2){
-                if(spriteRenderer.flipX){
+            if (gameManager.Bullet > -2)
+            {
+                if (spriteRenderer.flipX)
+                {
                     GameObject newItem;
                     newItem = Instantiate(LeftBullet);//총알
                     newItem.transform.position =
-                    new Vector3( rigid.transform.position.x ,rigid.transform.position.y);
-                    Destroy(newItem , 5.0f);
+                    new Vector3(rigid.transform.position.x, rigid.transform.position.y);
+                    Destroy(newItem, 5.0f);
                     gameManager.GETBullet(-1);
                     PlaySound("SHOT");
                 }
-                else{
+                else
+                {
                     GameObject newItem;
                     newItem = Instantiate(RightBullet);//총알
                     newItem.transform.position =
-                    new Vector3( rigid.transform.position.x ,rigid.transform.position.y);
-                    Destroy(newItem , 5.0f);
+                    new Vector3(rigid.transform.position.x, rigid.transform.position.y);
+                    Destroy(newItem, 5.0f);
                     gameManager.GETBullet(-1);
                     PlaySound("SHOT");
                 }
@@ -164,19 +167,22 @@ public class PlayerMove : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D other)
     {
-        if (other.gameObject.tag == "Enemy")
+        if (gameObject.layer == 8)
         {
-            if (rigid.velocity.y < 0.1 &&
-             transform.position.y+0.3 > other.transform.position.y &&
-              other.gameObject.name != "Spikes")
+            if (other.gameObject.tag == "Enemy")
             {
-                OnAttack(other.transform);
-                PlaySound("ATTACK");
-            }
-            else
-            {
-                OnDamaged(other.transform.position);
-                
+                if (rigid.velocity.y < 0.1 &&
+                 transform.position.y - 0.5f > other.transform.position.y &&
+                  other.gameObject.name != "Spikes")
+                {
+                    OnAttack(other.transform);
+                    PlaySound("ATTACK");
+                }
+                else
+                {
+                    OnDamaged(other.transform.position);
+
+                }
             }
         }
     }
@@ -192,7 +198,7 @@ public class PlayerMove : MonoBehaviour
     void OnDamaged(Vector2 targetPos)
     {
         gameManager.healthDown();
-        if(gameManager.health == 0)
+        if (gameManager.health == 0)
             PlaySound("DIE");
         else
             PlaySound("DAMAGED");
