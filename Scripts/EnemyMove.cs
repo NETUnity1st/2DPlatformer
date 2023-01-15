@@ -25,10 +25,10 @@ public class EnemyMove : MonoBehaviour
     void FixedUpdate()
     {
         //Move
-        rigid.velocity = new Vector2(2*nextMove, rigid.velocity.y);
+        rigid.velocity = new Vector2(2 * nextMove, rigid.velocity.y);
         //지형 체크
-        Debug.DrawRay(rigid.position + Vector2.right*(nextMove) * 0.7f + Vector2.down, Vector3.down, new Color(0, 1, 0));
-        RaycastHit2D rayHit = Physics2D.Raycast(rigid.position + Vector2.right*(nextMove)*0.7f + Vector2.down*0.5f , Vector3.down, 1, LayerMask.GetMask("Platform"));
+        Debug.DrawRay(rigid.position + Vector2.right * (nextMove) * 0.7f + Vector2.down, Vector3.down, new Color(0, 1, 0));
+        RaycastHit2D rayHit = Physics2D.Raycast(rigid.position + Vector2.right * (nextMove) * 0.7f + Vector2.down * 0.5f, Vector3.down, 1, LayerMask.GetMask("Platform"));
         if (rayHit.collider == null)
         {
             CancelInvoke();
@@ -36,9 +36,10 @@ public class EnemyMove : MonoBehaviour
             nextMove = -nextMove;
             rigid.velocity = new Vector2(nextMove, rigid.velocity.y);
             spriteRenderer.flipX = (nextMove == 1);
-            Debug.Log("Warning");    
+            Debug.Log("Warning");
         }
-        if(rigid.transform.position.y < -100){
+        if (rigid.transform.position.y < -100)
+        {
             CancelInvoke();
             DeActive();
         }
@@ -46,15 +47,15 @@ public class EnemyMove : MonoBehaviour
 
     void Think()
     {
-        Debug.Log("Thinking..."); 
+        Debug.Log("Thinking...");
         nextMove = Random.Range(-1, 2);
-        
+
         //쳐다보는 방향에 대한 코드
         spriteRenderer.flipX = (nextMove == 1);
 
-        float nextThinkTime = Random.Range(2f,5f);
+        float nextThinkTime = Random.Range(2f, 5f);
         Invoke("Think", nextThinkTime);
-        
+
     }
     void Update()
     {
@@ -64,21 +65,29 @@ public class EnemyMove : MonoBehaviour
         else
             anim.SetBool("IsWalking", true);
     }
-    
+
     public void OnDamaged()
     {
         nextMove = 0;
-        spriteRenderer.color = new Color(1,1,1,0.4f);
+        spriteRenderer.color = new Color(1, 1, 1, 0.4f);
 
         spriteRenderer.flipY = true;
 
         capuslecollider.enabled = false;
 
         rigid.AddForce(Vector2.up * 5, ForceMode2D.Impulse);
-        Invoke("DeActive",2.0f);
+        Invoke("DeActive", 2.0f);
     }
     public void DeActive()
     {
         gameObject.SetActive(false);
+    }
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.gameObject.tag == "Bullet")
+        {
+            OnDamaged();
+            Destroy(other.gameObject);
+        }
     }
 }

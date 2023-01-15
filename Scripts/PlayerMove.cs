@@ -11,13 +11,16 @@ public class PlayerMove : MonoBehaviour
     public AudioClip audioItem;
     public AudioClip audioDie;
     public AudioClip audioFinish;
+    public AudioClip audioShot;
     public float maxSpeedx;
     Rigidbody2D rigid;
-    SpriteRenderer spriteRenderer;
+    public SpriteRenderer spriteRenderer;
     Animator anim;
     public float jumpPower;
     BoxCollider2D boxcollider;
     AudioSource audioSource;
+    public GameObject LeftBullet;
+    public GameObject RightBullet;
     // Start is called before the first frame update
     void Awake()
     {
@@ -28,7 +31,7 @@ public class PlayerMove : MonoBehaviour
         audioSource = GetComponent<AudioSource>();
     }
 
-    void PlaySound(string action)
+    public void PlaySound(string action)
     {
         switch (action)
         {
@@ -50,12 +53,39 @@ public class PlayerMove : MonoBehaviour
             case "FINISH":
                 audioSource.clip = audioFinish;
                 break;
+            case "SHOT":
+                audioSource.clip = audioShot;
+                break;
         }
         audioSource.Play();
     }
 
     void Update()
     {
+        //공격(총알)에 관한 코드
+        if (Input.GetKeyDown(KeyCode.LeftControl))
+        {
+            if(gameManager.Bullet > -2){
+                if(spriteRenderer.flipX){
+                    GameObject newItem;
+                    newItem = Instantiate(LeftBullet);//총알
+                    newItem.transform.position =
+                    new Vector3( rigid.transform.position.x ,rigid.transform.position.y);
+                    Destroy(newItem , 5.0f);
+                    gameManager.GETBullet(-1);
+                    PlaySound("SHOT");
+                }
+                else{
+                    GameObject newItem;
+                    newItem = Instantiate(RightBullet);//총알
+                    newItem.transform.position =
+                    new Vector3( rigid.transform.position.x ,rigid.transform.position.y);
+                    Destroy(newItem , 5.0f);
+                    gameManager.GETBullet(-1);
+                    PlaySound("SHOT");
+                }
+            }
+        }
         //점프에 관한 코드
         if (Input.GetButtonDown("Jump") && !(anim.GetBool("IsJumping")))
         {
@@ -121,7 +151,7 @@ public class PlayerMove : MonoBehaviour
             else if (IsGold)
                 gameManager.stagePoint += 300;
 
-            gameManager.Bullet += 1;
+            gameManager.GETBullet(1);
             other.gameObject.SetActive(false);
             PlaySound("ITEM");
         }
