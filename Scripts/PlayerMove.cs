@@ -65,7 +65,7 @@ public class PlayerMove : MonoBehaviour
         //공격(총알)에 관한 코드
         if (Input.GetKeyDown(KeyCode.LeftControl))
         {
-            if (gameManager.Bullet > -2)
+            if (gameManager.Bullet > 0)
             {
                 if (spriteRenderer.flipX)
                 {
