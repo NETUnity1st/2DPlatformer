@@ -68,7 +68,7 @@ public class GameManager : MonoBehaviour
         if (other.gameObject.tag == "Player")
         {
             healthDown();
-            if (health > 1)
+            if (health > 0)
                 PlayerReposition();
             player.PlaySound("DAMAGED");
         }
