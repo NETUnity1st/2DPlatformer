@@ -213,6 +213,7 @@ public class PlayerMove : MonoBehaviour
         anim.SetBool("IsJumping", true);
         anim.SetTrigger("DoDamaged");
         Invoke("offDamaged", 1);
+
     }
     void offDamaged()
     {

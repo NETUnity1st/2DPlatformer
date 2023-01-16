@@ -40,9 +40,9 @@ public class GameManager : MonoBehaviour
     }
     public void healthDown()
     {
-
-        health -= 1;
-        UIhealth[health].color = new Color(1,0,0,0.4f);
+        PlayerHP.curHp -= 10; 
+        health -= 10;
+    //    UIhealth[health].color = new Color(1,0,0,0.4f);
         if (health <= 0)
         {
             player.OnDie();
@@ -79,7 +79,7 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         RestartBtn.SetActive(false);
-        health = 3;
+        health = 100;
         Bullet = 0;
     }
 
